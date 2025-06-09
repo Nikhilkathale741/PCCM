@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}Social Network{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'pccm_website/style.css' %}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script>
+    {% if request.user.is_authenticated %}
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    {% endif %} {% block script %} {% endblock %} {% block css %} {% endblock %}
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2 sidebar">
+        <div class="logo" style="display: flex; align-items: center;">
+          <div class="mb-3">
+            <img src="{% static 'images/elixir.jpeg' %}" alt="Elixir AI" style="width: 100px; height: auto;">
+          </div>
+          <div style="margin-left: 10px; font-size: 1.2rem; font-weight: bold;">
+            Healthcare Engine
+          </div>
+        </div>
+          <a href="{% url 'index' %}">Home Button</a>
+          <a class="text-white px-3 mt-3">Appointments</a>
+          <a href="{% url 'total_visits' %}">Visits</a>
+          <a href="#">Patient Information History</a>
+          <a href="#">Clinical Examination</a>
+          <a href="#">Radiology</a>
+          <a href="#">Biopsy Histopathology</a>
+          <a href="#">Biobank</a>
+          <a href="#">NAST</a>
+          <a href="#">Genetics</a>
+          <a href="#">Surgery</a>
+          <a href="#">Surgery Histopathology</a>
+          <a href="#">Follow-up</a>
+          <a href="#">Radiation</a>
+          <a href="#">AST</a>
+          <a href="#">Nutrition</a>
+          <a href="#">Onco-psychology</a>
+          <a href="#">PROMS</a>
+          <a href="#">Dashboard/ Analytics</a>
+        </div>
+        <div class="col-md-10">
+          <div class="header-bar">
+            <form
+              method="POST"
+              action="{% url 'search_result' %}"
+              class="form-inline"
+              name="searched"
+              
+            >
+            {% csrf_token %}
+              <input
+                class="form-control mr-sm-2"
+                type="search"
+                name="searched"
+                placeholder="Search by Patient ID"
+                id="search_box"
+              />
+              <button class="btn btn-outline-success" type="submit">
+                Search
+              </button>
+            </form>
+            <div class="navbtn">
+              <button class="btn btn-outline-info me-2">Notifications</button>
+              <button class="btn btn-outline-dark">
+                <a class="logout" href="{% url 'logout' %}">Log Out</a>
+                {% csrf_token %}
+              </button>
+            </div>
+          </div>
+          {% block body %} {% endblock %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

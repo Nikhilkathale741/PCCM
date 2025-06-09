@@ -1,0 +1,153 @@
+{% extends "pccm_website/layout.html" %}
+{% load static %}
+{% block css %}
+<link href="{% static 'pccm_website/pccm_details.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block body %}
+<div class="container">
+  <main class="main-content">
+    <section class="form-section">
+      <form method="post">
+        {% csrf_token %}
+        <fieldset class="section-box">
+          <legend>Basic Details</legend>
+          <div class="field-grid">
+            <label>First Name: {{ form.first_name }}</label>
+            {{ form.first_name.errors }}
+            <label>Middle Name: {{ form.middle_name }}</label>
+            {{ form.middle_name.errors }}
+            <label>Last Name: {{ form.last_name }}</label>
+            {{ form.last_name.errors }}
+            <label>Full Name: {{ form.full_name }}</label>
+            {{ form.full_name.errors }}
+            <div class="dob-age-wrapper">
+              <label>Date of Birth: {{ form.date_of_birth }}</label>
+              {{ form.date_of_birth.errors }}
+              <div class="age-fields">
+                <label>Age:</label>
+                {{ form.age_years }} Years
+                {{ form.age_years.errors }}
+                {{ form.age_months }} Months
+                {{ form.age_months.errors }}
+                {{ form.age_days }} Days
+                {{ form.age_days.errors }}
+                <label class="estimated">{{ form.estimated_dob }} Estimated</label>
+                {{ form.estimated_dob.errors }}
+              </div>
+            </div>
+
+            <label>Gender:
+              <div class="inline-radio">{{ form.gender }}</div>
+              {{ form.gender.errors }}
+            </label>
+
+            <label>Blood Group: {{ form.blood_group }}</label>
+            {{ form.blood_group.errors }}
+            <label>Religion: {{ form.religion }}</label>
+            {{ form.religion.errors }}
+            <label>Education: {{ form.education }}</label>
+            {{ form.education.errors }}
+            <label>Occupation: {{ form.occupation }}</label>
+            {{ form.occupation.errors }}
+          </div>
+        </fieldset>
+
+        <fieldset class="section-box">
+          <legend>Contact Details</legend>
+
+          <div class="subsection">
+            <div class="field-pair">
+              <label>Mobile Number: {{ form.mobile_number }}</label>
+              {{ form.mobile_number.errors }}
+              <label>Email: {{ form.email }}</label>
+              {{ form.email.errors }}
+            </div>
+            <div class="field-pair">
+              <label>ID Proof: {{ form.id_proof }}</label>
+              {{ form.id_proof.errors }}
+              <label>ID Number: {{ form.id_number }}</label>
+              {{ form.id_number.errors }}
+            </div>
+          </div>
+
+          <div class="subsection">
+            <h4>Emergency Contact Details:</h4>
+            <div class="field-pair">
+              <label>Emergency Contact Person: {{ form.emergency_contact_person }}</label>
+              {{ form.emergency_contact_person.errors }}
+              <label>Relation: {{ form.emergency_relation }}</label>
+              {{ form.emergency_relation.errors }}
+            </div>
+            <div class="field-pair">
+              <label>Emergency Mobile Number: {{ form.emergency_mobile_number }}</label>
+              {{ form.emergency_mobile_number.errors }}
+              <label>Emergency Landline Number: {{ form.emergency_landline_number }}</label>
+              {{ form.emergency_landline_number.errors }}
+            </div>
+          </div>
+
+          <div class="subsection">
+            <h4>Permanent Address Details:</h4>
+            <div class="field-pair">
+              <label>Permanent Address: {{ form.permanent_address }}</label>
+              {{ form.permanent_address.errors }}
+              <label>Permanent City/ Sub-District: {{ form.permanent_city }}</label>
+              {{ form.permanent_city.errors }}
+            </div>
+            <div class="field-pair">
+              <label>Permanent Pincode: {{ form.permanent_pincode }}</label>
+              {{ form.permanent_pincode.errors }}
+              <label>Permanent State/ Union Territory: {{ form.permanent_state_ut }}</label>
+              {{ form.permanent_state_ut.errors }}
+            </div>
+          </div>
+
+          <div class="subsection">
+            <h4>Current Address Details:</h4>
+            <label class="checkbox-inline">{{ form.is_current_same_as_permanent }} Is Current Address same as Permanent Address?</label>
+            {{ form.is_current_same_as_permanent.errors }}
+            <div class="field-pair">
+              <label>Address: {{ form.current_address }}</label>
+              {{ form.current_address.errors }}
+              <label>City/ Sub-District: {{ form.current_city }}</label>
+              {{ form.current_city.errors }}
+            </div>
+            <div class="field-pair">
+              <label>Pincode: {{ form.current_pincode }}</label>
+              {{ form.current_pincode.errors }}
+              <label>State/ Union Territory: {{ form.current_state_ut }}</label>
+              {{ form.current_state_ut.errors }}
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="section-box">
+          <legend>Registration ID & Associated Details</legend>
+          <div class="field-grid">
+            <label>Patient ID: {{ form.patient_id }}</label>
+            {{ form.patient_id.errors }}
+            <label>File Number: {{ form.file_number }}</label>
+            {{ form.file_number.errors }}
+            <label>Team: {{ form.team }}</label>
+            {{ form.team.errors }}
+            <label>Primary Consultant: {{ form.primary_consultant }}</label>
+            {{ form.primary_consultant.errors }}
+            <label>Patient Type: {{ form.patient_type }}</label>
+            {{ form.patient_type.errors }}
+            <label>Date of Registration: {{ form.date_of_registration }}</label>
+            {{ form.date_of_registration.errors }}
+            <label>Referral Source: {{ form.referral_source }}</label>
+            {{ form.referral_source.errors }}
+            <label>Jehangir ID: {{ form.jehangir_id }}</label>
+            {{ form.jehangir_id.errors }}
+          </div>
+        </fieldset>
+        <button type="submit" class="icon-btn">Submit</button>
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{% static 'pccm_website/age.js' %}"></script>
+{% endblock %}

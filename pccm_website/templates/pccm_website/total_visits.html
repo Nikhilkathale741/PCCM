@@ -1,0 +1,32 @@
+{% extends "pccm_website/layout.html" %} 
+{% load static %} 
+{% block css %}
+<link href="{% static 'pccm_website/total_visit.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block body %}
+<h2>Visit Details</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>Full Name</th>
+            <th>Visit Type</th>
+            <th>Visit Date</th>
+            <th>Next Visit Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for visit in visits %}
+        <tr>
+            <td>{{ visit.patient_id.patient_id }}</td>
+            <td>{{ visit.patient_id.full_name }}</td>
+            <td>{{ visit.visit_type }}</td>
+            <td>{{ visit.visit_date }}</td>
+            <td>{{ visit.next_visit_date }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="12">No visit records available.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
