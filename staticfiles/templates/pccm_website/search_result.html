@@ -1,0 +1,65 @@
+{% extends "pccm_website/layout.html" %} 
+{% load static %} 
+{% block css %}
+<link href="{% static 'pccm_website/search.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block body %} 
+{% csrf_token %}
+  {% if PatientBasicInfo %} {% for patient in PatientBasicInfo %}
+  <div class="patient-info">
+    <div class="column">
+        Patient Name: {{ patient.full_name }}<br/>
+        Gender: {{ patient.gender }} <br/>
+        Age: {{ patient.age
+        }}<br/>
+        Patient ID:<span id="p_id">{{ patient.patient_id }}</span><br/>
+        File No:  {{ patient.file_number }}
+    </div>
+    <div>
+        Consultant: {{ patient.primary_consultant }}<br/>
+        First Visit Date: {{ patient.date_of_registration }} <br/>
+        Date of Diagnosis:  {{ patient.diagnosis_date }}<br/>
+        Diagnosis: {{ patient.diagnosis }}
+    </div>
+    <div>
+        Biomarkers: {{ patient.biomarkers }}<br/>
+        Surgery Date: {{ patient.surgery_date }}<br/>
+        Surgery: {{ patient.surgery }}
+    </div>
+</div>
+
+<!-- Buttons Grid -->
+<div class="button-grid">
+    <button onclick="showContent('Case Summary')">Case Summary</button>
+    <button onclick="showContent('Visits')">Visits</button>
+    <button onclick="showContent('Patient Information History')">Patient Information History</button>
+    <button onclick="showContent('Clinical Examination')">Clinical Examination</button>
+    <button onclick="showContent('Radiology')">Radiology</button>
+    <button onclick="showContent('Biopsy Histopathology')">Biopsy Histopathology</button>
+    <button onclick="showContent('Biobank')">Biobank</button>
+    <button onclick="showContent('NAST')">NAST</button>
+    <button onclick="showContent('Genetics')">Genetics</button>
+    <button onclick="showContent('Flight Plan')">Flight Plan</button>
+    <button onclick="showContent('Surgery')">Surgery</button>
+    <button onclick="showContent('Surgery Histopathology')">Surgery Histopathology</button>
+    <button onclick="showContent('Follow-up')">Follow-up</button>
+    <button onclick="showContent('Complications')">Complications</button>
+    <button onclick="showContent('Radiation')">Radiation</button>
+    <button onclick="showContent('AST')">AST</button>
+    <button onclick="showContent('Nutrition')">Nutrition</button>
+    <button onclick="showContent('Onco-psychology')">Onco-psychology</button>
+    <button onclick="showContent('PROMs')">PROMs</button>
+</div>
+
+<!-- Case Summary -->
+<div class="case-summary" id="caseSummary">
+    <h3>Select a section to view its details here.</h3>
+    <p></p>
+</div>
+  {% endfor %} {% else %}
+  <p>No results found for "{{ searched }}"</p>
+  {% endif %}
+</div> {% endblock %}
+{% block script %}
+<script src="{% static 'pccm_website/search.js' %}"></script>
+{% endblock %}

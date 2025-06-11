@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link href="{% static 'pccm_website/pccm.css' %}" rel="stylesheet"/>
+    <title>PCCM Login Page</title>
+  </head>
+  <body>
+<h2>Register</h2>
+
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
+
+<form action="{% url 'register' %}" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <input
+      class="form-control"
+      autofocus
+      type="text"
+      name="username"
+      placeholder="Username"
+    />
+  </div>
+  <div class="form-group">
+    <input
+      class="form-control"
+      type="email"
+      name="email"
+      placeholder="Email Address"
+    />
+  </div>
+  <div class="form-group">
+    <input
+      class="form-control"
+      type="password"
+      name="password"
+      placeholder="Password"
+    />
+  </div>
+  <div class="form-group">
+    <input
+      class="form-control"
+      type="password"
+      name="confirmation"
+      placeholder="Confirm Password"
+    />
+  </div>
+  <input class="btn btn-primary" type="submit" value="Register" />
+</form>
+Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+</body>
+</html>
