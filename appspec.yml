@@ -2,9 +2,9 @@ version: 0.0
 os: linux
 files: 
   - source: /
-    destination: /home/ubuntu/blogprojectdrf
+    destination: /home/ubuntu/PCCM
 permissions:
-  - object: /home/ubuntu/blogprojectdrf
+  - object: /home/ubuntu/PCCM
     owner: ubuntu
     group: ubuntu
 hooks:
