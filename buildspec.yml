@@ -1,7 +1,7 @@
-version: 0.1
+version: 0.2
 
-environment_variables:
-  plaintext:
+env:
+  variables:
     DJANGO_SETTINGS_MODULE: config.settings.test
     SECRET_KEY: nosecret
     DATABASE_DEFAULT_URL: sqlite:///db1.sqlite3
@@ -10,18 +10,24 @@ environment_variables:
     STREAM_INCOMING_PUBLIC_KEY: changeme
     GOOGLE_API_KEY: changeme
     OPBEAT_ENABLED: False
+    ImageName: simple-docker-service
 
 phases:
   pre_build:
     commands:
-      - echo Prebuild ops
-      - pip3 install -r requirements.txt
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 512378128187.dkr.ecr.eu-north-1.amazonaws.com
   build:
     commands:
-      - echo Building the application 
+      - echo Building Docker image...
+      - docker build -t $ImageName -f pccm_website/Dockerfile .
   post_build:
     commands:
+      - echo Tagging and pushing Docker image...
+      - docker tag $ImageName:latest 512378128187.dkr.ecr.eu-north-1.amazonaws.com/$ImageName:latest
+      - docker push 512378128187.dkr.ecr.eu-north-1.amazonaws.com/$ImageName:latest
       - echo Build completed on `date`
+
 artifacts:
   files:
     - '**/*'
