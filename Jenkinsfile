@@ -2,22 +2,27 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_DIR = "/home/ubuntu/PCCM"
-        VENV = "/home/ubuntu/PCCM/venv/bin/activate"
+        PROJECT_DIR = "${env.WORKSPACE}"
+        VENV_DIR = "${env.WORKSPACE}/venv"
+        PYTHON_BIN = "${env.WORKSPACE}/venv/bin/python"
+        PIP_BIN = "${env.WORKSPACE}/venv/bin/pip"
+        ACTIVATE = "source ${env.WORKSPACE}/venv/bin/activate"
     }
 
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/Nikhilkathale741/PCCM.git'
+                // Jenkins automatically checks out the repo; nothing needed here.
+                echo "Repository cloned to ${env.WORKSPACE}"
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Set up Virtual Environment') {
             steps {
                 sh '''
-                cd $PROJECT_DIR
-                . $VENV
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
                 pip install --break-system-packages -r requirements.txt
                 '''
             }
@@ -26,10 +31,9 @@ pipeline {
         stage('Apply Migrations') {
             steps {
                 sh '''
-                cd $PROJECT_DIR
-                . $VENV
-                python manage.py makemigrations
-                python manage.py migrate
+                . venv/bin/activate
+                ${PYTHON_BIN} manage.py makemigrations
+                ${PYTHON_BIN} manage.py migrate
                 '''
             }
         }
@@ -37,21 +41,18 @@ pipeline {
         stage('Collect Static Files') {
             steps {
                 sh '''
-                cd $PROJECT_DIR
-                . $VENV
-                python manage.py collectstatic --noinput
+                . venv/bin/activate
+                ${PYTHON_BIN} manage.py collectstatic --noinput
                 '''
             }
         }
 
-        stage('Restart Gunicorn') {
+        stage('Start Gunicorn') {
             steps {
                 sh '''
-                sudo systemctl restart gunicorn || \
-                (pkill gunicorn && \
-                cd $PROJECT_DIR && \
-                . $VENV && \
-                nohup gunicorn PCCM.wsgi:application --bind 0.0.0.0:8000 &)
+                . venv/bin/activate
+                pkill gunicorn || true
+                ${PYTHON_BIN} -m gunicorn PCCM.wsgi:application --bind 0.0.0.0:8000 --daemon
                 '''
             }
         }
