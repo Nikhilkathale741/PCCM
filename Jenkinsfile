@@ -2,16 +2,22 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_DIR = "${WORKSPACE}"
-        VENV = "${WORKSPACE}/venv/bin/activate"
+        PROJECT_DIR = "/var/lib/jenkins/workspace/pipelinetest"
+        VENV = "$PROJECT_DIR/venv/bin/activate"
     }
 
     stages {
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Nikhilkathale741/PCCM.git'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh '''
                 cd $PROJECT_DIR
-                source $VENV
+                . $VENV
                 pip install -r requirements.txt
                 '''
             }
@@ -21,7 +27,7 @@ pipeline {
             steps {
                 sh '''
                 cd $PROJECT_DIR
-                source $VENV
+                . $VENV
                 python manage.py makemigrations
                 python manage.py migrate
                 '''
@@ -32,7 +38,7 @@ pipeline {
             steps {
                 sh '''
                 cd $PROJECT_DIR
-                source $VENV
+                . $VENV
                 python manage.py collectstatic --noinput
                 '''
             }
@@ -42,12 +48,12 @@ pipeline {
             steps {
                 sh '''
                 pkill gunicorn || true
+                . $VENV
                 cd $PROJECT_DIR
-                source $VENV
-                nohup gunicorn PCCM.wsgi:application --bind 0.0.0.0:8000 &
+                gunicorn PCCM.wsgi:application --bind 0.0.0.0:8000 --daemon
                 '''
             }
         }
     }
 }
-       
+
