@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_DIR = "/var/lib/jenkins/workspace/pipelinetest"
-        VENV = "$PROJECT_DIR/venv/bin/activate"
+        PROJECT_DIR = "/home/ubuntu/PCCM"
+        VENV = "/home/ubuntu/PCCM/venv/bin/activate"
     }
 
     stages {
@@ -18,7 +18,7 @@ pipeline {
                 sh '''
                 cd $PROJECT_DIR
                 . $VENV
-                pip install -r requirements.txt
+                pip install --break-system-packages -r requirements.txt
                 '''
             }
         }
@@ -47,10 +47,11 @@ pipeline {
         stage('Restart Gunicorn') {
             steps {
                 sh '''
-                pkill gunicorn || true
-                . $VENV
-                cd $PROJECT_DIR
-                gunicorn PCCM.wsgi:application --bind 0.0.0.0:8000 --daemon
+                sudo systemctl restart gunicorn || \
+                (pkill gunicorn && \
+                cd $PROJECT_DIR && \
+                . $VENV && \
+                nohup gunicorn PCCM.wsgi:application --bind 0.0.0.0:8000 &)
                 '''
             }
         }
